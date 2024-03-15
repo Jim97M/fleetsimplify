@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NODE_ENV=development
+    environment:
+      - PORT=3000
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PW=postgres123      
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+    links:
+      - postgres:postgres
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run dev
+
+  postgres:
+    container_name: postgres-db
+    image: postgres:12
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres123
+      - POSTGRES_DB=fleetsimplify
+    networks:
+      - backend_network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/dbDumpFile:/dbDumpFile
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+        - 8080:8080
+  
+networks:
+  backend_network:
+    driver: bridge
+
+volumes:
+  postgres_data: {}
