@@ -18,23 +18,29 @@ export class BookService {
     @Inject(RedisRepository) private readonly redisRepository: RedisRepository,
   ){}
 
- async createBook(user: User, book: Book): Promise<Book> {
-    book.recorder = user;
+   async createBook(user: User, book: Book):Promise<Book> {
+
     const bookInfo = await this.redisServiceClass.getBookInfo(book.isbn);
+    console.log('Book Info:', bookInfo);
+
+    const mergedBookData: Book = {
     
-    book.title = bookInfo.title;
-    book.author = bookInfo.author;
-    book.publisher = bookInfo.publisher;
-    book.description = bookInfo.description;
-    book.name = bookInfo.name;
-    book.recorder = user;
-    book.subject_type = bookInfo.subject_type;
-    book.coverImageUrl = bookInfo.coverImageUrl;
-    book.isbn = bookInfo.isbn;
-    book.createdAt = new Date();
-    const savedBook = await this.bookRepository.save(book);
+    bib_key: bookInfo.bib_key,
+    preview_url: bookInfo.preview_url,
+    preview : bookInfo.preview,
+    thumbnail_url :bookInfo.thumbnail_url,
+    info_url : bookInfo.info_url,
+    recorder : user,
+    createdAt: new Date(),
+    ...book
+    }
     
-    // Return the saved book
+    // const recorder = user;
+
+    // const createdAt = new Date();
+
+    const savedBook =  this.bookRepository.save(mergedBookData);
+    
     return savedBook;
 }
 
@@ -72,6 +78,4 @@ async getBook(bookId: string): Promise<Book | null>{
  const book = await this.redisRepository.get(Role.BOOK, bookId);
  return book ? JSON.parse(book) : null;
 }
-
-
 }

@@ -1,36 +1,36 @@
-import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
-import { BookService } from "../services/book.service";
-import { User } from "src/auth/models/user.class";
-import { Observable, map, switchMap } from "rxjs";
-import { UserService } from "src/auth/services/user.service";
-import { Book } from "../models/book.interface";
 
-@Injectable()
-export class RolePermissionGuard implements CanActivate {
-   constructor(
-       private userService: UserService,
-       private bookService: BookService,
-   ){}
+// import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+// import { Reflector } from '@nestjs/core';
+// import { Role } from 'src/auth/models/role.enum';
+// @Injectable()
+// export class RolesGuard implements CanActivate {
+//   constructor(
+//       private reflector: Reflector,
+//   ) {}
 
-   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-       const request = context.switchToHttp().getRequest();
-       const {user, params} : {user: User; params: {id: number}} = request;
+//   async canActivate(context: ExecutionContext): Promise<boolean> {
+//     const roles = this.reflector.getAllAndMerge<Role[]>('roles', [
+//       context.getClass(),
+//       context.getHandler(),
+//     ]) || [];
 
-       if (!user || !params) return false;
+//     const isPublic = this.reflector.getAllAndOverride<boolean>('public', [
+//       context.getHandler(),
+//       context.getClass(),
+//     ]);
 
-       const userId = user.id;
+//     if (!roles || isPublic) {
+//       return true;
+//     }
 
-       const bookId = params.id;
+//     let isAllowed = false;
 
-       return this.userService.findByUserId(userId).pipe(
-           switchMap((user: User) => 
-               this.bookService.findBookById(bookId).pipe(
-                   map((book: Book) => {
-                       return book.recorder === userId;
-                   }),
-               ),
+//     roles.forEach(role => {
+//       if ((context.switchToHttp().getRequest().request.user.roles & role) === role) {
+//         isAllowed = true;
+//       }
+//     });
 
-                )
-       );
-                }
-   }
+//     return isAllowed;
+//   }
+// }

@@ -9,3 +9,6 @@ export class User {
   password?: string;
   role?: Role;
 }
+export interface RequestWithUser extends Request {
+  user: User;
+}

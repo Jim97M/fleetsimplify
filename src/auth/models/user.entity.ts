@@ -19,14 +19,12 @@ import {
     @Column({ select: false })
     password: string;
   
-    @Column({ nullable: true })
-    imagePath: string;
-  
     @Column({ type: 'enum', enum: Role, default: Role.USER })
     role: Role;
 
     @OneToMany(
-      () => BookEntity, (bookEntity) => bookEntity.author)
+      () => BookEntity, (bookEntity) => bookEntity.recorder)
       books: BookEntity[];  
+
   }
   

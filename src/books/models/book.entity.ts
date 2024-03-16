@@ -4,6 +4,7 @@ import {
     Entity,
     ManyToOne,
     PrimaryGeneratedColumn,
+    JoinColumn
   } from 'typeorm';
   
   import { UserEntity } from '../../auth/models/user.entity';
@@ -15,7 +16,8 @@ import {
     id: number;
 
     @Column({ default: '' })
-    name: string;
+    title: string;
+
 
     @Column({ default: '' })
     subject_type: string;
@@ -36,12 +38,22 @@ import {
     recorder: UserEntity;
 
     @Column({ default: '' })
-    title: string;
-
-    @Column({ default: '' })
-    coverImageUrl: string;
-
-    @Column({ default: '' })
     description: string;
+
+    @Column({ default: '' })
+    bib_key: string;
+
+    @Column({ default: '' })
+    info_url: string;
+
+    @Column({ default: '' })
+    preview: string;
+ 
+    @Column({ default: '' })
+    preview_url: string;
+
+    @Column({ default: '' })
+    thumbnail_url: string;
+
   }
   

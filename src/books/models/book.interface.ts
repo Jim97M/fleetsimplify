@@ -3,7 +3,7 @@ import { User } from "src/auth/models/user.class";
 export interface Book {
     id?: number;
   
-    name?: string;
+    title?: string;
   
     subject_type?: string;
   
@@ -15,11 +15,18 @@ export interface Book {
 
     recorder?: User;
 
-    isbn: string; 
+    isbn?: string; 
 
-    title: string;
+    description?: string;
+  
+    bib_key?: string;
 
-    coverImageUrl: string;
+    info_url?: string;
 
-    description: string;
+    preview?: string;
+  
+    preview_url?: string;
+ 
+    thumbnail_url?: string;
+
 }

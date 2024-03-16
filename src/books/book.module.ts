@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { RolePermissionGuard } from './guards/role-permission-creator.guard';
 import { BooksController } from './controllers/book.controller';
 import { BookService } from './services/book.service';
 import { RedisServiceClass } from './services/redis.service';
@@ -13,7 +12,7 @@ import { RedisModule } from './infrastructure/redis/redis.module';
 
 @Module({
     imports: [AuthModule, TypeOrmModule.forFeature([BookEntity]), RedisModule],
-    providers: [BookService, RolePermissionGuard, RedisRepository, redisClientFactory, RedisServiceClass],
+    providers: [BookService, RedisRepository, redisClientFactory, RedisServiceClass],
     controllers: [BooksController],
   })
   export class BookModule {}

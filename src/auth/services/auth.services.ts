@@ -8,6 +8,7 @@ import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../models/user.entity';
 import { User } from '../models/user.class';
+import { Role } from '../models/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +31,7 @@ export class AuthService {
   }
 
   registerAccount(user: User): Observable<User> {
-    const { email, password } = user;
+    const { email, password, role } = user;
 
     return this.doesUserExist(email).pipe(
       tap((doesUserExist: boolean) => {
@@ -47,6 +48,7 @@ export class AuthService {
               this.userRepository.save({
                 email,
                 password: hashedPassword,
+                role: role || Role.USER,
               }),
             ).pipe(
               map((user: User) => {
