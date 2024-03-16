@@ -21,18 +21,29 @@ import { Role } from 'src/auth/models/role.enum';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiBody,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { BookEntity } from '../models/book.entity';
 
+
+@ApiTags('Books')
 @Controller('books')
 export class BooksController {
   constructor (private bookService: BookService){}
 
   @Roles(Role.ADMIN)
   @UseGuards(JwtGuard)
+  @ApiResponse({ status: 201, description: 'User Registered Successfully.'})
+  @ApiResponse({ status: 403, description: 'Forbidden.'})
+  @ApiBody({
+     type: BookEntity,
+     description: 'Json structure for user object',
+  })
   @Post('add-book')
   create(@Body() book: Book, @Request() req): Promise<Book> {
     return this.bookService.createBook(req.user, book);

@@ -1,8 +1,10 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { User } from "src/auth/models/user.class";
 
 export interface Book {
     id?: number;
   
+    
     title?: string;
   
     subject_type?: string;
